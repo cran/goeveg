@@ -2,7 +2,7 @@
 #' @description This function draws multiple rank-abundance curves for selected samples into one diagram.
 #' If you wish to draw a simple rank-abundance curve see \link{racurve}.
 #' @param matrix Community data, a matrix-like object with samples in rows and species in columns. Rank-abundance curves are drawn for all selected rows (samples).
-#' @param main The main title.
+#' @param main The main title (optional).
 #' @param bw If set on \code{FALSE} the lines will be drawn in colours instead of black/white lines with different line types.
 #' @section Details:
 #' Rank abundance curves or Whittaker plots (see \cite{Whittaker 1965}) are used to display relative species abundance as biodiversity component.
@@ -12,7 +12,10 @@
 #' As the line type is used to differenciate between samples, a maximum of 6 curves per diagram is feasible in black/white mode.
 #' @examples
 #' ## Draw multiple rank-abundance curves for selected samples
-#' racurves(schedenveg[c(1,7,20,25),])
+#' racurves(schedenveg[c(1,7,20,25), ])
+#'
+#' ## Draw multiple rank-abundance curves for selected samples with coloured lines
+#' racurves(schedenveg[c(1,7,20,25), ], bw = FALSE)
 #' @seealso \code{\link{racurve}}
 #' @references Whittaker, R. H. (1965). Dominance and Diversity in Land Plant Communities: Numerical relations of species express the importance of competition in community function and evolution. \emph{Science} \strong{147 :} 250-260.
 #' @author Friedemann Goral (\email{fgoral@gwdg.de})
