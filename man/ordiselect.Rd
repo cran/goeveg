@@ -10,7 +10,7 @@ ordiselect(matrix, ord, ablim = 1, fitlim = 1, choices = c(1, 2),
 \arguments{
 \item{matrix}{Community data, a matrix-like object with samples in rows and species in columns.}
 
-\item{ord}{\code{vegan} ordination result object (e.g. from \code{\link[vegan]{decorana}}, \code{\link[vegan]{cca}}, \code{\link[vegan]{rda}} or \code{\link[vegan]{metaMDS}}).}
+\item{ord}{\code{vegan} ordination result object (e.g. from \code{\link[vegan]{decorana}}, \code{\link[vegan]{cca}} or \code{\link[vegan]{metaMDS}}).}
 
 \item{ablim}{Proportion of species with highest abundances to be displayed. Value between 0 and 1.}
 
@@ -20,7 +20,7 @@ ordiselect(matrix, ord, ablim = 1, fitlim = 1, choices = c(1, 2),
 
 \item{method}{The species fit method: \code{"axes"} or \code{"vars"}. See details for methods.}
 
-\item{env}{Fitted environmental variabes (result object of \code{\link[vegan]{envfit}}). Only used if \code{method = "vars"}.}
+\item{env}{Fitted environmental variables (result object of \code{\link[vegan]{envfit}}). Only used if \code{method = "vars"}.}
 
 \item{p.max}{Significance limit for variables used in \code{method = "vars"}.}
 
@@ -48,6 +48,7 @@ The default for \code{matrix} input is a cover-abundance-matrix. This matrix sho
 
 If no limit is defined for one of the arguments \code{ablim, fitlim}, all species are displayed.
 }
+
 \examples{
 ## Calculate DCA
 library(vegan)
@@ -79,4 +80,3 @@ limited13 <- ordiselect(schedenveg, nmds, ablim = 0.3, fitlim = 0.6,
 \author{
 Friedemann Goral (\email{fgoral@gwdg.de}) and Jenny Schellenberg
 }
-
