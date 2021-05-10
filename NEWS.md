@@ -1,8 +1,21 @@
+# goeveg 0.5.1
+- fixes in references and value tags
+
+# goeveg 0.5.0
+- removal of functions synsort() and syntable() due to unsolved incompatibilities
+
+# goeveg 0.4.4
+- Added lwd argument to ordiselect
+
+# goeveg 0.4.3
+- Added xlim & ylim arguments to racurve
+- Added na.rm argument to ordiselect
+
 # goeveg 0.4.2
 - Small fixes, fixed package dependencies
 - Spell checking
 
-# goeveg 0.4.0
+# goeveg 0.4.1
 - Added new functions for calculation and sorting of synoptic tables: syntable() and synsort()
 
 # goeveg 0.3.3

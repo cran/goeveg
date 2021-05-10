@@ -4,8 +4,18 @@
 \alias{specresponse}
 \title{Species response curves}
 \usage{
-specresponse(species, var, main, xlab, model = "auto", method = "env",
-  axis = 1, points = FALSE, bw = FALSE)
+specresponse(
+  species,
+  var,
+  main,
+  xlab,
+  model = "auto",
+  method = "env",
+  axis = 1,
+  points = FALSE,
+  bw = FALSE,
+  lwd = NULL
+)
 }
 \arguments{
 \item{species}{Species data (either a community matrix object with samples in rows and species in columns - response curves are drawn for all (selected) columns; or a single vector containing species abundances per plot).}
@@ -22,9 +32,16 @@ specresponse(species, var, main, xlab, model = "auto", method = "env",
 
 \item{axis}{Ordination axis (only if \code{method = "ord"}).}
 
-\item{points}{If set on \code{TRUE} the species occurrences are shown as points. To avoid overlapping they are shown with vertical offset.}
+\item{points}{If set on \code{TRUE} the species occurrences are shown as transparent points (the darker the point the more samples at this x-value). To avoid overlapping they are shown with vertical offset.}
 
 \item{bw}{If set on \code{TRUE} the lines will be drawn in black/white with different line types instead of colors.}
+
+\item{lwd}{Optional: Graphical parameter defining the line width.}
+}
+\value{
+Returns character string with information on model type and parameters per species.
+
+No return if model type predefined \emph{linear} or \emph{unimodal}.
 }
 \description{
 This function fits species response curves to visualize species responses to environmental gradients or ordination axes.

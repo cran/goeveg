@@ -4,8 +4,15 @@
 \alias{racurve}
 \title{Rank-abundance curves}
 \usage{
-racurve(matrix, main = "Rank-abundance diagram", nlab = 0,
-  ylog = FALSE, frequency = FALSE)
+racurve(
+  matrix,
+  main = "Rank-abundance diagram",
+  nlab = 0,
+  ylog = FALSE,
+  frequency = FALSE,
+  ylim = NULL,
+  xlim = NULL
+)
 }
 \arguments{
 \item{matrix}{Community data, a matrix-like object with samples in rows.}
@@ -17,11 +24,13 @@ racurve(matrix, main = "Rank-abundance diagram", nlab = 0,
 \item{ylog}{If set on \code{TRUE} the y-axis is displayed on a log-scale.}
 
 \item{frequency}{If set on \code{TRUE} frequencies of species are calculated instead of relative abundances.}
+
+\item{xlim, ylim}{Define axis limits}
 }
 \value{
 Returns an (invisible) list composed of:
-  \item{\code{abund }}{abundance of each species (in decreasing order)}
-  \item{\code{rel.abund }}{relative abundance of each species (in decreasing order)}
+  \item{\code{abund }}{abundances of each species (in decreasing order)}
+  \item{\code{rel.abund }}{relative abundances of each species (in decreasing order)}
   \item{\code{freq }}{frequency of each species (in decreasing order)}
 }
 \description{
@@ -48,7 +57,7 @@ racurve(schedenveg, ylog = TRUE)
 racurve(schedenveg, frequency = TRUE, nlab = 1, main = "")
 }
 \references{
-Whittaker, R. H. (1965). Dominance and Diversity in Land Plant Communities: Numerical relations of species express the importance of competition in community function and evolution. \emph{Science} \strong{147 :} 250-260.
+Whittaker, R. H. (1965). Dominance and Diversity in Land Plant Communities: Numerical relations of species express the importance of competition in community function and evolution. \emph{Science} \strong{147 :} 250-260. \doi{10.1126/science.147.3655.250}
 }
 \seealso{
 \code{\link{racurves}} for multiple curves and \code{\link[BiodiversityR]{rankabundance}} from package \code{BiodiversityR} for a more sophisticated function

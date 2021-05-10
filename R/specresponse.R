@@ -9,8 +9,9 @@
 #' @param model Defining the assumed species response: Default \code{model = "auto"} selects the model automatically based on AIC. Other methods are \code{model = "linear"} (linear response), \code{model = "unimodal"} (unimodal response), \code{model = "bimodal"} (bimodal response) and \code{model = "gam"} (using GAM with regression smoother).
 #' @param method Method defining the type of variable. Default \code{method = "env"} fits a response curve to environmental variables. Alternatively \code{method = "ord"} fits a response along ordination axes.
 #' @param axis Ordination axis (only if \code{method = "ord"}).
-#' @param points If set on \code{TRUE} the species occurrences are shown as points. To avoid overlapping they are shown with vertical offset.
+#' @param points If set on \code{TRUE} the species occurrences are shown as transparent points (the darker the point the more samples at this x-value). To avoid overlapping they are shown with vertical offset.
 #' @param bw If set on \code{TRUE} the lines will be drawn in black/white with different line types instead of colors.
+#' @param lwd Optional: Graphical parameter defining the line width.
 #' @section Details:
 #' For response curves based on environmental gradients the argument \code{var} takes a single vector containing the variable corresponding to the species abundances.
 #'
@@ -21,6 +22,10 @@
 #'
 #' Available information about species is reduced to presence-absence as species abundances can contain much noise (being affected by complex factors) and the results of Logistic Regression are easier to interpret showing the "probabilities of occurrence".
 #' Be aware that response curves are only a simplification of reality (model) and their shape is strongly dependent on the available dataset.
+#' @return
+#' Returns character string with information on model type and parameters per species.
+#'
+#' No return if model type predefined \emph{linear} or \emph{unimodal}.
 #' @examples
 #' ## Draw species response curve for one species on environmental variable
 #' ## with points of occurrences
@@ -65,7 +70,7 @@
 #' @importFrom mgcv gam
 #' @importFrom vegan scores decostand
 
-specresponse <- function(species, var, main, xlab, model = "auto", method = "env", axis = 1, points = FALSE, bw = FALSE) {
+specresponse <- function(species, var, main, xlab, model = "auto", method = "env", axis = 1, points = FALSE, bw = FALSE, lwd = NULL) {
 
   if(!is.data.frame(species)) {
 
@@ -188,7 +193,7 @@ specresponse <- function(species, var, main, xlab, model = "auto", method = "env
                  col = rgb(col[1], col[2], col[3], maxColorValue = 255, alpha = 50))
         }
 
-        lines(preds ~ xneu, lty=i)
+        lines(preds ~ xneu, lty=i, lwd = lwd)
       } else {
 
         if(points == TRUE) {
@@ -203,7 +208,7 @@ specresponse <- function(species, var, main, xlab, model = "auto", method = "env
                  pch = 16)
         }
 
-        lines(preds ~ xneu, col = i)
+        lines(preds ~ xneu, col = i, lwd = lwd)
       }
     }
 
