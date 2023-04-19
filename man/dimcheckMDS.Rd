@@ -35,7 +35,7 @@ It is based on function \code{\link[vegan]{metaMDS}} (\code{vegan} package) and 
 
 Goodness of Non-metric multidimensional scaling (NMDS) is measured by stress value.
 The lower the stress value, the better fit of original distances/dissimilarities and projected distances in ordination diagram is reached.
-Stress value depends on dimensionality; it is decreasing with increasing dimensionality. On the other hand, stress-reduction does not mean to maximise interpretation capability.
+Stress value depends on dimensionality; it is decreasing with increasing dimensionality. On the other hand, stress-reduction does not mean to maximize interpretation capability.
 Low-dimensional projections are often better to interpret and are so preferable for interpretation issues.
 The stress plot (or sometimes also called scree plot) is a diagnostic plots to explore both, dimensionality and interpretative value.
 It provides dimension-dependent stress reduction and curve estimate gives indices for meaningful stress reduction with increasing dimensionality.
@@ -60,5 +60,5 @@ Clarke, K. R. (1993). Non-parametric multivariate analysis of changes in communi
 \code{\link[vegan]{metaMDS}} \code{\link[vegan:goodness.metaMDS]{stressplot}}
 }
 \author{
-Jenny Schellenberg (\email{jschell@gwdg.de}) and Friedemann Goral (\email{fgoral@gwdg.de})
+Jenny Schellenberg (\email{jschell@gwdg.de}) and Friedemann von Lampe (\email{fvonlampe@uni-goettingen.de})
 }
