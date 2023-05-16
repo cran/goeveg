@@ -14,7 +14,8 @@ specresponse(
   axis = 1,
   points = FALSE,
   bw = FALSE,
-  lwd = NULL
+  lwd = NULL,
+  na.action = na.omit
 )
 }
 \arguments{
@@ -37,14 +38,16 @@ specresponse(
 \item{bw}{If set on \code{TRUE} the lines will be drawn in black/white with different line types instead of colors.}
 
 \item{lwd}{Optional: Graphical parameter defining the line width.}
+
+\item{na.action}{Optional: a function which indicates what should happen when the data contain NAs. The default is 'na.omit' (removes incomplete cases).}
 }
 \value{
 Returns an (invisible) list with results for all calculated models. This list can be stored by assigning the result.
-For each model short information on type, parameters and significance are printed.
+For each model short information on type, parameters, explained deviance and corresponding p-value (based on chi-squared test) are printed.
 }
 \description{
 This function fits species response curves to visualize species responses to environmental gradients or ordination axes.
-It is based on Logistic Regression using Generalized Linear Models (GLMs) or Generalized Additive Models (GAMs) with integrated smoothness estimation.
+It is based on Logistic Regression (binomial family) using Generalized Linear Models (GLMs) or Generalized Additive Models (GAMs) with integrated smoothness estimation.
 The function can draw response curves for single or multiple species.
 }
 \section{Details}{

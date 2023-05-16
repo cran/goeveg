@@ -1,3 +1,14 @@
+# goeveg 0.6.4
+* Added functions 'deg2rad()' and 'rad2deg()' for conversion between radians and degrees
+* Updated data table 'schedenenv'
+
+# goeveg 0.6.3
+* Fixed wrong p-value calculation for GLMs in 'specresponse()'
+* Fixed problem with NAs in 'specresponse()' when showing point values
+
+# goeveg 0.6.2
+* Added na.action argument to 'specresponse()'
+
 # goeveg 0.6.1
 * Explained deviances and p-values are now printed in 'specresponse()'. Full model results are returned in an (invisible) object. 
 * Added functionality to select the least abundant (rarest) species in 'ordiselect()'

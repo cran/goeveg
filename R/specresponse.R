@@ -1,6 +1,6 @@
 #' Species response curves
 #' @description This function fits species response curves to visualize species responses to environmental gradients or ordination axes.
-#' It is based on Logistic Regression using Generalized Linear Models (GLMs) or Generalized Additive Models (GAMs) with integrated smoothness estimation.
+#' It is based on Logistic Regression (binomial family) using Generalized Linear Models (GLMs) or Generalized Additive Models (GAMs) with integrated smoothness estimation.
 #' The function can draw response curves for single or multiple species.
 #' @param species Species data (either a community matrix object with samples in rows and species in columns - response curves are drawn for all (selected) columns; or a single vector containing species abundances per plot).
 #' @param var Vector containing environmental variable (per plot) \strong{OR} \code{vegan} ordination result object if \code{method = "ord"}.
@@ -12,6 +12,7 @@
 #' @param points If set on \code{TRUE} the species occurrences are shown as transparent points (the darker the point the more samples at this x-value). To avoid overlapping they are shown with vertical offset when multiple species are displayed.
 #' @param bw If set on \code{TRUE} the lines will be drawn in black/white with different line types instead of colors.
 #' @param lwd Optional: Graphical parameter defining the line width.
+#' @param na.action Optional: a function which indicates what should happen when the data contain NAs. The default is 'na.omit' (removes incomplete cases).
 #' @section Details:
 #' For response curves based on environmental gradients the argument \code{var} takes a single vector containing the variable corresponding to the species abundances.
 #'
@@ -24,7 +25,7 @@
 #' Be aware that response curves are only a simplification of reality (model) and their shape is strongly dependent on the available dataset.
 #' @return
 #' Returns an (invisible) list with results for all calculated models. This list can be stored by assigning the result.
-#' For each model short information on type, parameters and significance are printed.
+#' For each model short information on type, parameters, explained deviance and corresponding p-value (based on chi-squared test) are printed.
 #' @examples
 #' ## Draw species response curve for one species on environmental variable
 #' ## with points of occurrences
@@ -71,7 +72,7 @@
 #' @importFrom mgcv gam
 #' @importFrom vegan scores decostand
 
-specresponse <- function(species, var, main, xlab, model = "auto", method = "env", axis = 1, points = FALSE, bw = FALSE, lwd = NULL) {
+specresponse <- function(species, var, main, xlab, model = "auto", method = "env", axis = 1, points = FALSE, bw = FALSE, lwd = NULL, na.action = na.omit) {
 
   if(!is.data.frame(species)) {
 
@@ -129,12 +130,14 @@ specresponse <- function(species, var, main, xlab, model = "auto", method = "env
       if(model == "unimodal") {
 
         specresponse <- suppressWarnings(glm(species[,i] ~ poly(var, 2),
-                                             family="binomial"))
+                                             family="binomial", na.action = na.action))
+        glm.0 <- glm(species[,i] ~ 1, family = "binomial")
 
         dev.expl <- round(100 * with(summary(specresponse), 1 - deviance/null.deviance), 1)
-        pval <- round(coef(summary(specresponse))[,4][2], 3)
+        pval <- round(anova(specresponse, glm.0, test="Chisq")[2,5], 3)
 
-        print(paste0("GLM with 2 degrees fitted for ", specnames[i], ". Deviance explained: ", dev.expl, "%, p-value = ", pval))
+        print(paste0("GLM with 2 degrees fitted for ", specnames[i], ". Deviance explained: ", dev.expl, "%, p-value ",
+                     ifelse(pval == 0, "< ", "= "), ifelse(pval == 0, "0.001", pval),"."))
 
         results[[i]] <- specresponse
         names(results)[i] <- specnames[i]
@@ -142,12 +145,15 @@ specresponse <- function(species, var, main, xlab, model = "auto", method = "env
       } else if (model == "linear") {
 
         specresponse <- suppressWarnings(glm(species[,i] ~ var,
-                                             family="binomial"))
+                                             family="binomial", na.action = na.action))
+
+        glm.0 <- glm(species[,i] ~ 1, family = "binomial")
 
         dev.expl <- round(100 * with(summary(specresponse), 1 - deviance/null.deviance), 1)
-        pval <- round(coef(summary(specresponse))[,4][2], 3)
+        pval <- round(anova(specresponse, glm.0, test="Chisq")[2,5], 3)
 
-        print(paste0("GLM with 1 degree fitted for ", specnames[i], ". Deviance explained: ", dev.expl, "%, p-value = ", pval))
+        print(paste0("GLM with 1 degree fitted for ", specnames[i], ". Deviance explained: ", dev.expl, "%, p-value ",
+                     ifelse(pval == 0, "< ", "= "), ifelse(pval == 0, "0.001", pval),"."))
 
         results[[i]] <- specresponse
         names(results)[i] <- specnames[i]
@@ -155,12 +161,15 @@ specresponse <- function(species, var, main, xlab, model = "auto", method = "env
       } else if (model == "bimodal") {
 
         specresponse <- suppressWarnings(glm(species[,i] ~ poly(var, 4),
-                                             family="binomial"))
+                                             family="binomial", na.action = na.action))
+
+        glm.0 <- glm(species[,i] ~ 1, family = "binomial")
 
         dev.expl <- round(100 * with(summary(specresponse), 1 - deviance/null.deviance), 1)
-        pval <- round(coef(summary(specresponse))[,4][2], 3)
+        pval <- round(anova(specresponse, glm.0, test="Chisq")[2,5], 3)
 
-        print(paste0("GLM with 4 degrees fitted for ", specnames[i], ". Deviance explained: ", dev.expl, "%, p-value = ", pval,"."))
+        print(paste0("GLM with 4 degrees fitted for ", specnames[i], ". Deviance explained: ", dev.expl, "%, p-value ",
+                     ifelse(pval == 0, "< ", "= "), ifelse(pval == 0, "0.001", pval),"."))
 
         results[[i]] <- specresponse
         names(results)[i] <- specnames[i]
@@ -168,9 +177,9 @@ specresponse <- function(species, var, main, xlab, model = "auto", method = "env
       }
       else if (model == "auto") {
 
-        glm.1 <- suppressWarnings(glm(species[,i] ~ poly(var, 1), family="binomial"))
-        glm.2 <- suppressWarnings(glm(species[,i] ~ poly(var, 2), family="binomial"))
-        glm.3 <- suppressWarnings(glm(species[,i] ~ poly(var, 3), family="binomial"))
+        glm.1 <- suppressWarnings(glm(species[,i] ~ poly(var, 1), family="binomial", na.action = na.action))
+        glm.2 <- suppressWarnings(glm(species[,i] ~ poly(var, 2), family="binomial", na.action = na.action))
+        glm.3 <- suppressWarnings(glm(species[,i] ~ poly(var, 3), family="binomial", na.action = na.action))
         glm.AIC <- c(extractAIC (glm.1)[2], extractAIC (glm.2)[2],
                      extractAIC (glm.3)[2])
 
@@ -179,10 +188,13 @@ specresponse <- function(species, var, main, xlab, model = "auto", method = "env
                {specresponse <- glm.2; deg<-2},
                {specresponse <- glm.3; deg<-3})
 
-        dev.expl <- round(100 * with(summary(specresponse), 1 - deviance/null.deviance), 1)
-        pval <- round(coef(summary(specresponse))[,4][2], 3)
+        glm.0 <- glm(species[,i] ~ 1, family = "binomial")
 
-        print(paste0("GLM with ", deg, " degrees fitted for ", specnames[i], ". Deviance explained: ", dev.expl, "%, p-value = ", pval,"."))
+        dev.expl <- round(100 * with(summary(specresponse), 1 - deviance/null.deviance), 1)
+        pval <- round(anova(specresponse, glm.0, test="Chisq")[2,5], 3)
+
+        print(paste0("GLM with ", deg, " degrees fitted for ", specnames[i], ". Deviance explained: ", dev.expl, "%, p-value ",
+                     ifelse(pval == 0, "< ", "= "), ifelse(pval == 0, "0.001", pval),"."))
 
         results[[i]] <- specresponse
         names(results)[i] <- specnames[i]
@@ -193,7 +205,7 @@ specresponse <- function(species, var, main, xlab, model = "auto", method = "env
         gam.AIC <- 0
 
         for(n in 1:4) {
-          gam.list[[paste("gam", n, sep=".")]] <- mgcv::gam(species[,i] ~ s(var, k = n+2), family='binomial')
+          gam.list[[paste("gam", n, sep=".")]] <- mgcv::gam(species[,i] ~ s(var, k = n+2), family='binomial', na.action = na.action)
           gam.AIC[n] <- extractAIC(gam.list[[n]])[2]
         }
 
@@ -204,11 +216,10 @@ specresponse <- function(species, var, main, xlab, model = "auto", method = "env
                {specresponse <- gam.list[[4]]; deg<-6})
 
         dev.expl <- round(100 * with(specresponse, 1 - deviance/null.deviance), 1)
-        dev.expl
         pval <- round(summary(specresponse)$s.table[,4], 3)
-        pval
 
-        print(paste0("GAM with ", deg, " knots fitted for ", specnames[i], ". Deviance explained: ", dev.expl, "%, p-value = ", pval,"."))
+        print(paste0("GAM with ", deg, " knots fitted for ", specnames[i], ". Deviance explained: ", dev.expl, "%, p-value ",
+                     ifelse(pval == 0, "< ", "= "), ifelse(pval == 0, "0.001", pval),"."))
 
         results[[i]] <- specresponse
         names(results)[i] <- specnames[i]
@@ -225,8 +236,8 @@ specresponse <- function(species, var, main, xlab, model = "auto", method = "env
       if(bw == T) {
         if(points == TRUE) {
           if(i > 1) {
-            species[,i][species[,i]==1] <- species[,i][species[,i]==1] - 0.02*(i-1)
-            species[,i][species[,i]==0] <- species[,i][species[,i]==0] + 0.02*(i-1)
+            species[,i] <- ifelse(species[,i] == 1, species[,i] - 0.015*(i-1), species[,i])
+            species[,i] <- ifelse(species[,i] == 0, species[,i] + 0.015*(i-1), species[,i])
           }
 
           col <- col2rgb("black")
@@ -239,8 +250,8 @@ specresponse <- function(species, var, main, xlab, model = "auto", method = "env
 
         if(points == TRUE) {
           if(i > 1) {
-            species[,i][species[,i]==1] <- species[,i][species[,i]==1] - 0.02*(i-1)
-            species[,i][species[,i]==0] <- species[,i][species[,i]==0] + 0.02*(i-1)
+            species[,i] <- ifelse(species[,i] == 1, species[,i] - 0.015*(i-1), species[,i])
+            species[,i] <- ifelse(species[,i] == 0, species[,i] + 0.015*(i-1), species[,i])
           }
 
           col <- col2rgb(i)
