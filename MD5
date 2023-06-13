@@ -1,6 +1,6 @@
-eb01f24a832e0b0dc367262a1a54020e *DESCRIPTION
+51be7a98093c2209f2e6e7147aa872e7 *DESCRIPTION
 71965ec118e37b78893fd4c1eb14ce41 *NAMESPACE
-cdbd6792023bc6373eede15ede518642 *NEWS.md
+107cafd3f6d27b365ded97792056e88d *NEWS.md
 f417ef19c6aadfdf07459e1ed45c5146 *R/cv.r
 3a7f0134cf84c5592f3c507fb1cfa6ce *R/data_schedenenv.r
 aea6329971eed528a6ce0a5938b8d0c5 *R/data_schedenveg.r
@@ -8,7 +8,7 @@ aea6329971eed528a6ce0a5938b8d0c5 *R/data_schedenveg.r
 66216478e27055053912015aaf1c7e81 *R/dimcheckMDS.R
 b06e4a0ca6bec4242451984f0e4b964c *R/main.r
 7ed6c96f3679bfc4ed781e27334bc467 *R/ordiselect.r
-a8e214ba7578a42325c3403a36f19a34 *R/racurve.r
+cea1ca9a80afa3a6f98067cd7ad7dc77 *R/racurve.r
 9913006987f239c385fd37d602cf90f6 *R/racurves.r
 23ac7b611228422f4e0e5006c84f23b8 *R/sem.r
 91e64dadfaab682497e28ba3c220f4e2 *R/specresponse.R
