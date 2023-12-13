@@ -19,7 +19,7 @@
 #' The \code{p.max} argument allows selection of only significant variables, default is \code{p.max = 0.05}.}
 #'
 #' The species fit methods work well both in eigenvalue-based and in distance-based ordinations and provide good option of objective reduction of visible species in ordination plot for better interpretation issues.
-#' If axes fit should be applied on distance-based ordination, species scores need to be calculated during the analysis, e.g. by selecting \code{wascores = TRUE} in \code{\link[vegan]{metaMDS}}. It is mostly recommendable to combine the species fit limit with an abundance limit so avoid overinterpretation of rare species.
+#' If axes fit should be applied on distance-based ordination, species scores need to be calculated during the analysis, e.g. by selecting \code{wascores = TRUE} in \code{\link[vegan]{metaMDS}}. It is mostly recommendable to combine the species fit limit with an abundance limit to avoid overinterpretation of rare species.
 #'
 #' For the abundance limit, note that the final proportion of the selected species may be higher than the indicated proportion if there are identical values in the abundances.
 #' For selection of least abundant (rarest) species you can use a negative sign, e.g. \code{ablim = -0.3} for the 30 percent least abundant species.
@@ -92,6 +92,11 @@ ordiselect <-  function(matrix, ord, ablim = 1, fitlim = 1, choices = c(1, 2), f
   } else {
     abund <- apply(matrix>0, 2, sum)
   }
+  
+  abneg = FALSE
+  if(ablim < 0) abneg = TRUE
+  
+  # ablim = 40/ncol(matrix)  # possibility to calculate automatic abundance limit for a maximum of 40 species
 
   scores <- data.frame(scores(ord, display = "species", choices = choices))
 
@@ -116,9 +121,30 @@ ordiselect <-  function(matrix, ord, ablim = 1, fitlim = 1, choices = c(1, 2), f
     }
 
     per <- round(length(selected) / length(abund) * 100, digits = 1)
-
-    print(paste0(length(selected), " species selected (", per, "%)"))
-
+    
+    # Messages
+    print(paste0(length(selected), " species selected (", per, "% of total number of species)."))
+    
+    if(fitlim < 1 & ablim < 1) {
+      print(paste0("All species selected which belong to the ", ablim*100, "% ", ifelse(abneg == TRUE, "least ", "most "), 
+                   ifelse(freq == FALSE, "abundant ", "frequent "),
+                   "species and to the ", fitlim*100, "% of species with the highest absolute axis scores."))
+    }
+    
+    if(fitlim == 1 & ablim < 1) {
+      print(paste0("All species selected which belong to the ", ablim*100, "% ", ifelse(abneg == TRUE, "least ", "most "), 
+                   ifelse(freq == FALSE, "abundant ", "frequent "),
+                   "species."))
+    }
+    
+    if(fitlim < 1 & ablim == 1) {
+      print(paste0("All species selected which belong to the ", fitlim*100, "% of species with the highest absolute axis scores."))
+    }
+    
+    if(fitlim == 1 & ablim == 1) {
+      print(paste0("All species selected."))
+    }
+    
     selected
 
 
@@ -171,8 +197,27 @@ ordiselect <-  function(matrix, ord, ablim = 1, fitlim = 1, choices = c(1, 2), f
 
             per <- round(length(selected) / length(abund) * 100, digits = 1)
 
-            print(paste0(length(selected), " species selected (", per, "%)"))
-
+            # Messages
+            print(paste0(length(selected), " species selected (", per, "% of total number of species)."))
+            
+            if(fitlim < 1 & ablim < 1) {
+              print(paste0("All species selected which belong to the ", ablim*100, "% ", ifelse(abneg == TRUE, "least ", "most "), ifelse(freq == FALSE, "abundant ", "frequent "),
+                           "species and to the ", fitlim*100, "% of species with the smallest distance to variable centroids."))
+            }
+            
+            if(fitlim == 1 & ablim < 1) {
+              print(paste0("All species selected which belong to the ", ablim*100, "% ", ifelse(abneg == TRUE, "least ", "most "), ifelse(freq == FALSE, "abundant ", "frequent "),
+                           "species."))
+            }
+            
+            if(fitlim < 1 & ablim == 1) {
+              print(paste0("All species selected which belong to the ", fitlim*100, "% of species with the smallest distance to variable centroids."))
+            }
+            
+            if(fitlim == 1 & ablim == 1) {
+              print(paste0("All species selected."))
+            }
+            
             selected
           }
         else {
