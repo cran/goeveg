@@ -1,8 +1,8 @@
 Package: goeveg
 Type: Package
 Title: Functions for Community Data and Ordinations
-Version: 0.7.4
-Date: 2024-02-26
+Version: 0.7.5
+Date: 2024-05-17
 Author: Friedemann von Lampe [aut, cre],
   Jenny Schellenberg [aut]
 Maintainer: Friedemann von Lampe <fvonlampe@uni-goettingen.de>
@@ -14,9 +14,9 @@ Imports: vegan, fields, mgcv, Hmisc
 Suggests: vegdata, BiodiversityR, cluster
 URL: https://github.com/fvlampe/goeveg/
 BugReports: https://github.com/fvlampe/goeveg/issues
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Encoding: UTF-8
 NeedsCompilation: no
-Packaged: 2024-02-26 12:33:02 UTC; Friedemann von Lampe
+Packaged: 2024-05-17 08:35:02 UTC; Friedemann von Lampe
 Repository: CRAN
-Date/Publication: 2024-02-26 12:50:03 UTC
+Date/Publication: 2024-05-17 08:50:02 UTC
